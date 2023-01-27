@@ -4,7 +4,7 @@ module Wikirate4ruby
     # @return [Integer]
     attr_reader :code
 
-    Wikirate4rubyError = Class.new(super)
+    Wikirate4rubyError = Class.new(self)
 
     # Raised when a Parsing error is occured
     ParsingError = Class.new(self)

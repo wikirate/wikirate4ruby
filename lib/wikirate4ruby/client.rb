@@ -17,6 +17,7 @@ require 'logger'
 module Wikirate4ruby
   module REST
     class Client
+      include Wikirate4ruby::Entities
       BASE_URL = 'https://wikirate.org'
       attr :api_key, :wikirate_api_url, :auth
 
@@ -48,7 +49,7 @@ module Wikirate4ruby
       end
 
       def get_company_group(identifier)
-        get_entity(identifier, Dataset)
+        get_entity(identifier, CompanyGroup)
       end
 
       def get_topic(identifier)

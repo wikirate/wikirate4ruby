@@ -6,11 +6,13 @@ require_relative 'entities/source'
 require_relative 'entities/topic'
 require_relative 'entities/dataset'
 require_relative 'entities/research_group'
+require_relative 'entities/company_group'
 require_relative 'entities/answer'
 require_relative 'entities/relationship_answer'
 require_relative 'entities/region'
 require_relative 'entities/checked_by'
 require 'json'
+require 'logger'
 
 module Wikirate4ruby
   module REST
@@ -22,6 +24,7 @@ module Wikirate4ruby
         @api_key = api_key
         @wikirate_api_url = wikirate_api_url
         @auth = auth
+        @logger = Logger.new(STDOUT)
       end
 
       def get_company(identifier)
@@ -99,6 +102,132 @@ module Wikirate4ruby
         metrics
       end
 
+      def get_topics(params = {})
+        topics = []
+        response = get('Topics.json', endpoint_params = %w[limit offset],
+                       filters = %w[name bookmark], params)
+
+        response['items'].each do |item|
+          topics.append(Topic.new(item))
+        end
+        topics
+      end
+
+      def get_datasets(params = {})
+        datasets = []
+        response = get('Data_Sets.json', endpoint_params = %w[limit offset],
+                       filters = %w[name bookmark wikirate_topic], params)
+
+        response['items'].each do |item|
+          datasets.append(Dataset.new(item))
+        end
+        datasets
+      end
+
+      def get_projects(params = {})
+        projects = []
+        response = get('Projects.json', endpoint_params = %w[limit offset],
+                       filters = %w[name wikirate_status], params)
+
+        response['items'].each do |item|
+          projects.append(Card.new(item))
+        end
+        projects
+      end
+
+      def get_sources(params = {})
+        sources = []
+        response = get('Sources.json', endpoint_params = %w[limit offset],
+                       filters = %w[name wikirate_title wikirate_topic report_type year wikirate_link company_name], params)
+
+        response['items'].each do |item|
+          sources.append(Source.new(item))
+        end
+        sources
+      end
+
+      def get_research_groups(params = {})
+        research_groups = []
+        response = get('Research_Groups.json', endpoint_params = %w[limit offset],
+                       filters = %w[name], params)
+
+        response['items'].each do |item|
+          research_groups.append(ResearchGroup.new(item))
+        end
+        research_groups
+      end
+
+      def get_company_groups(params = {})
+        company_groups = []
+        response = get('Company_Groups.json', endpoint_params = %w[limit offset],
+                       filters = %w[name], params)
+
+        response['items'].each do |item|
+          company_groups.append(CompanyGroup.new(item))
+        end
+        company_groups
+      end
+
+      def get_answers(metric_name, metric_designer, params = {})
+        answers = []
+        response = get("#{metric_designer}+#{metric_name}+Answers.json", endpoint_params = %w[limit offset],
+                       filters = %w[year verification value value_from value_to status source updated updater published
+                                    dataset company_id company_name company_category company_group country], params)
+
+        response['items'].each do |item|
+          answers.append(Answer.new(item))
+        end
+        answers
+      end
+
+      def get_answers_by_metric_id(metric_id, params = {})
+        answers = []
+        response = get("~#{metric_id}+Answers.json", endpoint_params = %w[limit offset],
+                       filters = %w[year verification value value_from value_to status source updated updater published
+                                    dataset company_id company_name company_category company_group country], params)
+
+        response['items'].each do |item|
+          answers.append(Answer.new(item))
+        end
+        answers
+      end
+
+      def get_company_answers(identifier, params = {})
+        answers = []
+        endpoint = !(identifier.is_a? String) ? "~#{identifier}+Answers.json" : "#{identifier}+Answers.json"
+        response = get(endpoint, endpoint_params = %w[limit offset],
+                       filters = %w[metric_name designer metric_type value_type research_policy year verification value
+                                    value_from value_to status source updated updater published dataset company_id
+                                    company_name company_category company_group country], params)
+
+        response['items'].each do |item|
+          answers.append(Answer.new(item))
+        end
+        answers
+      end
+
+      def get_relationship_answers(metric_name, metric_designer, params = {})
+        answers = []
+        response = get("#{metric_designer}+#{metric_name}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+                       filters = %w[year name company_category company_group dataset updated updater source published], params)
+
+        response['items'].each do |item|
+          answers.append(RelationshipAnswer.new(item))
+        end
+        answers
+      end
+
+      def get_relationship_answers_by_metric_id(metric_id, params = {})
+        answers = []
+        response = get("~#{metric_id}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+                       filters = %w[year name company_category company_group dataset updated updater source published], params)
+
+        response['items'].each do |item|
+          answers.append(RelationshipAnswer.new(item))
+        end
+        answers
+      end
+
       private
 
       def get_entity(identifier, klass)
@@ -119,13 +248,13 @@ module Wikirate4ruby
           if endpoint_params.include? key
             data[key] = value.to_s
           elsif filters.include? key
-            if key == 'value_from' or key == 'value_to'
-              data["filter[value][#{key.gsub(".*_", "")}]"] = value.to_s
+            if %w[value_from value_to].include?(key)
+              data["filter[value][#{key.gsub(/.*_/, '')}]"] = value.to_s
             else
               data["filter[#{key}]"] = value.to_s
             end
           else
-            log.warn("Unexpected parameter #{key}")
+            @logger.warn("Unexpected parameter #{key}")
           end
         end
         request(:get, endpoint, data)
@@ -176,3 +305,11 @@ module Wikirate4ruby
     end
   end
 end
+
+include Wikirate4ruby::REST
+include Wikirate4ruby::Entities
+client = Client.new('ThessaloWikiRate', 'https://staging.wikirate.org', { :username => 'wikirate', :password => 'wikirat' })
+# dataset = client.get_project 7927453
+
+puts client.get_relationship_answers("Supplied_by", "Commons",
+                                     { 'limit' => 10, 'offset' => 0, 'name'=> "Adidas AG", "year" => 2021})

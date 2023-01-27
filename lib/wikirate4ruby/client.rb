@@ -1,4 +1,4 @@
-require 'Faraday'
+require 'faraday'
 require_relative 'entities/card'
 require_relative 'entities/metric'
 require_relative 'entities/company'
@@ -81,7 +81,7 @@ module Wikirate4ruby
 
       def get_companies(params = {})
         companies = []
-        response = get('Companies.json', endpoint_params = %w[limit offset],
+        response = get('/Companies.json', endpoint_params = %w[limit offset],
                        filters = %w[name company_category company_group country], params)
 
         response['items'].each do |item|
@@ -91,9 +91,8 @@ module Wikirate4ruby
       end
 
       def get_metrics(params = {})
-        puts params
         metrics = []
-        response = get('Metrics.json', endpoint_params = %w[limit offset],
+        response = get('/Metrics.json', endpoint_params = %w[limit offset],
                        filters = %w[name bookmark wikirate_topic designer published metric_type value_type research_policy dataset], params)
 
         response['items'].each do |item|
@@ -104,7 +103,7 @@ module Wikirate4ruby
 
       def get_topics(params = {})
         topics = []
-        response = get('Topics.json', endpoint_params = %w[limit offset],
+        response = get('/Topics.json', endpoint_params = %w[limit offset],
                        filters = %w[name bookmark], params)
 
         response['items'].each do |item|
@@ -115,7 +114,7 @@ module Wikirate4ruby
 
       def get_datasets(params = {})
         datasets = []
-        response = get('Data_Sets.json', endpoint_params = %w[limit offset],
+        response = get('/Data_Sets.json', endpoint_params = %w[limit offset],
                        filters = %w[name bookmark wikirate_topic], params)
 
         response['items'].each do |item|
@@ -126,7 +125,7 @@ module Wikirate4ruby
 
       def get_projects(params = {})
         projects = []
-        response = get('Projects.json', endpoint_params = %w[limit offset],
+        response = get('/Projects.json', endpoint_params = %w[limit offset],
                        filters = %w[name wikirate_status], params)
 
         response['items'].each do |item|
@@ -137,7 +136,7 @@ module Wikirate4ruby
 
       def get_sources(params = {})
         sources = []
-        response = get('Sources.json', endpoint_params = %w[limit offset],
+        response = get('/Sources.json', endpoint_params = %w[limit offset],
                        filters = %w[name wikirate_title wikirate_topic report_type year wikirate_link company_name], params)
 
         response['items'].each do |item|
@@ -148,7 +147,7 @@ module Wikirate4ruby
 
       def get_research_groups(params = {})
         research_groups = []
-        response = get('Research_Groups.json', endpoint_params = %w[limit offset],
+        response = get('/Research_Groups.json', endpoint_params = %w[limit offset],
                        filters = %w[name], params)
 
         response['items'].each do |item|
@@ -159,7 +158,7 @@ module Wikirate4ruby
 
       def get_company_groups(params = {})
         company_groups = []
-        response = get('Company_Groups.json', endpoint_params = %w[limit offset],
+        response = get('/Company_Groups.json', endpoint_params = %w[limit offset],
                        filters = %w[name], params)
 
         response['items'].each do |item|
@@ -170,7 +169,7 @@ module Wikirate4ruby
 
       def get_answers(metric_name, metric_designer, params = {})
         answers = []
-        response = get("#{metric_designer}+#{metric_name}+Answers.json", endpoint_params = %w[limit offset],
+        response = get("/#{metric_designer}+#{metric_name}+Answers.json", endpoint_params = %w[limit offset],
                        filters = %w[year verification value value_from value_to status source updated updater published
                                     dataset company_id company_name company_category company_group country], params)
 
@@ -182,7 +181,7 @@ module Wikirate4ruby
 
       def get_answers_by_metric_id(metric_id, params = {})
         answers = []
-        response = get("~#{metric_id}+Answers.json", endpoint_params = %w[limit offset],
+        response = get("/~#{metric_id}+Answers.json", endpoint_params = %w[limit offset],
                        filters = %w[year verification value value_from value_to status source updated updater published
                                     dataset company_id company_name company_category company_group country], params)
 
@@ -194,7 +193,7 @@ module Wikirate4ruby
 
       def get_company_answers(identifier, params = {})
         answers = []
-        endpoint = !(identifier.is_a? String) ? "~#{identifier}+Answers.json" : "#{identifier}+Answers.json"
+        endpoint = !(identifier.is_a? String) ? "/~#{identifier}+Answers.json" : "/#{identifier}+Answers.json"
         response = get(endpoint, endpoint_params = %w[limit offset],
                        filters = %w[metric_name designer metric_type value_type research_policy year verification value
                                     value_from value_to status source updated updater published dataset company_id
@@ -208,7 +207,7 @@ module Wikirate4ruby
 
       def get_relationship_answers(metric_name, metric_designer, params = {})
         answers = []
-        response = get("#{metric_designer}+#{metric_name}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+        response = get("/#{metric_designer}+#{metric_name}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
                        filters = %w[year name company_category company_group dataset updated updater source published], params)
 
         response['items'].each do |item|
@@ -219,7 +218,7 @@ module Wikirate4ruby
 
       def get_relationship_answers_by_metric_id(metric_id, params = {})
         answers = []
-        response = get("~#{metric_id}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+        response = get("/~#{metric_id}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
                        filters = %w[year name company_category company_group dataset updated updater source published], params)
 
         response['items'].each do |item|
@@ -228,12 +227,163 @@ module Wikirate4ruby
         answers
       end
 
+      # @param [Hash] data
+      # @return [Wikirate4ruby::Entities::Company]
+      def add_company(data = {})
+        required_params = %w[name headquarters]
+        required_params.each do |param|
+          if data[param].nil? || data[param] == ''
+            raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following
+                                                             params to import a new company: #{required_params.to_s}"
+          end
+        end
+        card_name = data['name']
+        data.delete('name')
+        params = creation_params('Company', data, %w[headquarters oar_id wikipedia open_corporates sec_cik])
+        params['card[name]'] = card_name
+        params['confirmed'] = true
+        params['card[skip]'] = 'update_oc_mapping_due_to_headquarters_entry' if optional_params['open_corporates'].nil?
+        response = post('/card/create', params)
+        Company.new(response)
+      end
+
+      def update_company(data = {})
+        if data['company'].nil? || data['company'] == ''
+          raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to update a
+                                      company: [company]"
+        end
+        card_name = str_identifier(data['company'])
+        data.delete 'company'
+
+        params = creation_params('Company', data, %w[headquarters open_corporates oar_id wikipedia sec_cik])
+        params['card[name]'] = card_name
+        response = post('/card/update', params)
+        Company.new(response)
+      end
+
+      def add_research_metric_answer(data = {})
+        required_params = %w[metric_designer metric_name company year value source]
+        required_params.each do |param|
+          if data[param].nil? || data[param] == ''
+            raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to import a
+                                      new research answer: #{required_params.to_s}"
+          end
+        end
+        card_name = "#{data['metric_designer']}+#{data['metric_name']}+#{str_identifier(data['company'])}+#{data['year']}"
+        %w[metric_designer metric_name company year].each do |key|
+          data.delete key
+        end
+        params = creation_params('Answer', data, %w[source value discussion])
+        params['card[name]'] = card_name
+        response = post('/card/create', params)
+        Answer.new(response)
+      end
+
+      def update_research_metric_answer(data = {})
+        required_params = %w[metric_designer metric_name company]
+        if data['answer_id'].nil?
+          required_params.each do |param|
+            if data[param].nil? || data[param] == ''
+              raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to import a
+                                      new research answer: #{required_params.to_s}"
+            end
+          end
+          card_name = "#{data['metric_designer']}+#{data['metric_name']}+#{str_identifier(data['company'])}+#{data['year']}"
+          %w[metric_designer metric_name company year].each do |key|
+            data.delete key
+          end
+          allowed_params = %w[source value discussion]
+        else
+          card_name = str_identifier(data['answer_id'])
+          data.delete 'answer_id'
+          allowed_params = %w[year source value discussion]
+        end
+
+        params = creation_params('Answer', data, allowed_params)
+        params['card[name]'] = card_name
+        puts(params)
+        response = post('/card/update', params)
+        Answer.new(response)
+      end
+
+      def add_relationship_metric_answer(data = {})
+        required_params = %w[metric_designer metric_name subject_company object_company year value source]
+        required_params.each do |param|
+          if data[param].nil? || data[param] == ''
+            raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to import a
+                                      new research answer: #{required_params.to_s}"
+          end
+        end
+        card_name = "#{data['metric_designer']}+#{data['metric_name']}+#{str_identifier(data['subject_company'])}+#{data['year']}+#{str_identifier(data['object_company'])}"
+        %w[metric_designer metric_name subject_company object_company year].each do |key|
+          data.delete key
+        end
+        params = creation_params('RelationshipAnswer', data, %w[source value comments])
+        params['card[name]'] = card_name
+        response = post('/card/create', params)
+        RelationshipAnswer.new(response)
+      end
+
+      def update_relationship_metric_answer(data = {})
+        required_params = %w[metric_designer metric_name subject_company object_company year]
+        if data['answer_id'].nil?
+          required_params.each do |param|
+            if data[param].nil? || data[param] == ''
+              raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to import a
+                                      new research answer: #{required_params.to_s}"
+            end
+          end
+          card_name = "#{data['metric_designer']}+#{data['metric_name']}+#{str_identifier(data['company'])}+#{data['year']}"
+          %w[metric_designer metric_name subject_company year object_company].each do |key|
+            data.delete key
+          end
+          allowed_params = %w[source value discussion]
+        else
+          card_name = str_identifier(data['answer_id'])
+          data.delete 'answer_id'
+          allowed_params = %w[year source value discussion]
+        end
+
+        params = creation_params('RelationshipAnswer', data, allowed_params)
+        response = post("/update/#{card_name}", params)
+        RelationshipAnswer.new(response)
+      end
+
+      # @param [Hash] data
+      # @return [Wikirate4ruby::Entities::Source]
+      def add_source(data = {})
+        required_params = %w[link title]
+        required_params.each do |param|
+          if data[param].nil? || data[param] == ''
+            raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to import a
+                                      new source: #{required_params.to_s}"
+          end
+        end
+        params = creation_params('Source', data, %w[link title company report_type year])
+        params['card[skip]'] = 'requirements'
+        response = post('/card/create', params)
+        Source.new(response)
+      end
+
+      def update_source(data = {})
+        if data['source'].nil? || data['source'] == ''
+          raise Wikirate4ruby::Error::Wikirate4rubyError, "Invalid set of params! You need to define all the following params to update a
+                                      source: [source]"
+        end
+        card_name = str_identifier(data['source'])
+        data.delete 'source'
+        params = creation_params('Source', data, %w[link title company report_type year])
+        params['card[skip]'] = 'requirements'
+        response = post("/update/#{card_name}", params)
+        Source.new(response)
+      end
+
       private
 
       def get_entity(identifier, klass)
-        return klass.new(request(:get, "~#{identifier}.json")) unless identifier.is_a? String
+        return klass.new(request(:get, "/~#{identifier}.json")) unless identifier.is_a? String
 
-        klass.new(request(:get, "#{identifier}.json"))
+        klass.new(request(:get, "/#{identifier}.json"))
       end
 
       # @param [String] endpoint
@@ -260,18 +410,40 @@ module Wikirate4ruby
         request(:get, endpoint, data)
       end
 
+      def post(endpoint, data = {})
+        request(:post, endpoint, data)
+      end
+
+      def creation_params(entity, optional_params = {}, allowed_params = [])
+        params = {
+          'card[type]' => entity,
+          'format' => 'json',
+          'success[format]' => 'json'
+        }
+
+        optional_params.each do |key, value|
+          next if value.nil?
+
+          if allowed_params.include? key
+            params["card[subcards][+#{key}]"] = (%w[company subject_company object_company].include? key) ? str_identifier(value) : value.to_s
+          else
+            @logger.warn("Unexpected parameter: #{key}")
+          end
+        end
+        params
+      end
+
       # @param [String] method
       # @param [String] endpoint
       # @param [Array] data
       # @param [Hash] _options
       # @return [Hash]
       def request(method, endpoint, data = {}, **_options)
-        url = URI.parse("#{wikirate_api_url}/#{endpoint}")
+        url = URI.parse("#{wikirate_api_url}#{endpoint}")
 
         connection = Faraday.new do |conn|
-          unless auth.nil?
-            conn.request :authorization, :basic, auth[:username], auth[:password]
-          end
+          conn.request :authorization, :basic, auth[:username], auth[:password] unless auth.nil?
+          conn.request :url_encoded
           conn.request :json
           conn.response :json
         end
@@ -280,15 +452,24 @@ module Wikirate4ruby
                    when :get
                      connection.get(url, data, headers)
                    when :post
-                     connection.post(url, data, headers)
+                     connection.post(url) do |req|
+                       req.params = data
+                       req.headers = headers
+                     end
                    when :put
                      connection.put(url, data, headers)
                    when :delete
                      connection.delete(url, data, headers)
                    end
 
-        return response.body unless response.status != 200
+        #follow redirect
+        if response.status == 303
+          endpoint = response.headers['location']
+          endpoint[wikirate_api_url] = ''
+          return get(endpoint)
+        end
 
+        return response.body unless response.status != 200
         raise(error(response.status, response.body))
       end
 
@@ -302,14 +483,10 @@ module Wikirate4ruby
       def error(code, body)
         Wikirate4ruby::Error::HTTP_ERRORS[code].new(JSON.pretty_generate(body))
       end
+
+      def str_identifier(identifier)
+        (identifier.is_a? String) ? "#{identifier}" : "~#{identifier}"
+      end
     end
   end
 end
-
-include Wikirate4ruby::REST
-include Wikirate4ruby::Entities
-client = Client.new('ThessaloWikiRate', 'https://staging.wikirate.org', { :username => 'wikirate', :password => 'wikirat' })
-# dataset = client.get_project 7927453
-
-puts client.get_relationship_answers("Supplied_by", "Commons",
-                                     { 'limit' => 10, 'offset' => 0, 'name'=> "Adidas AG", "year" => 2021})

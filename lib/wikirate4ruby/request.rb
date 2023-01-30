@@ -4,9 +4,8 @@ require_relative './request_utils'
 
 module Wikirate4ruby
   module REST
-    include Wikirate4ruby::RequestUtils
-
     class Request
+      include Wikirate4ruby::RequestUtils
 
       attr :wikirate_api_url, :api_key, :auth, :logger
 

@@ -3,9 +3,10 @@
 require_relative 'test_helper'
 require 'wikirate4ruby/client'
 
+include Wikirate4ruby::REST
+include Wikirate4ruby::Entities
+
 class TestWikirate4ruby < Minitest::Test
-  include Wikirate4ruby::REST
-  include Wikirate4ruby::Entities
 
   def initialize(name)
     super

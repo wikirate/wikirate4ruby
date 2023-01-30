@@ -4,7 +4,7 @@ require_relative './request_utils'
 
 module Wikirate4ruby
   module REST
-    include REST::RequestUtils
+    include Wikirate4ruby::RequestUtils
 
     class Request
 
@@ -66,22 +66,22 @@ module Wikirate4ruby
                    when :get
                      connection.get(url) do |req|
                        req.params = data
-                       req.headers = headers @api_key
+                       req.headers = headers(@api_key)
                      end
                    when :post
                      connection.post(url) do |req|
                        req.params = data
-                       req.headers = headers @api_key
+                       req.headers = headers(@api_key)
                      end
                    when :put
                      connection.put(url) do |req|
                        req.data = data
-                       req.headers = headers @api_key
+                       req.headers = headers(@api_key)
                      end
                    when :delete
                      connection.delete(url) do |req|
                        req.data = data
-                       req.headers = headers @api_key
+                       req.headers = headers(@api_key)
                      end
                    end
 

@@ -19,8 +19,7 @@ module Wikirate4ruby
   module REST
     class Client
       include Wikirate4ruby::Entities
-      include Wikirate4ruby::REST
-      include Wikirate4ruby::REST::StringUtils
+      include Wikirate4ruby::StringUtils
 
       BASE_URL = 'https://wikirate.org'
       attr :request

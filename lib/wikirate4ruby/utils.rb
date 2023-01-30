@@ -1,5 +1,5 @@
 module Wikirate4ruby
-  module StringUtils
+  module Utils
 
     private
 

@@ -170,7 +170,8 @@ module Wikirate4ruby
 
       def get_answers(metric_name, metric_designer, params = {})
         answers = []
-        response = get("/#{metric_designer}+#{metric_name}+Answers.json", endpoint_params = %w[limit offset],
+        response = get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+Answers.json",
+                       endpoint_params = %w[limit offset],
                        filters = %w[year verification value value_from value_to status source updated updater published
                                     dataset company_id company_name company_category company_group country], params)
 
@@ -182,7 +183,7 @@ module Wikirate4ruby
 
       def get_answers_by_metric_id(metric_id, params = {})
         answers = []
-        response = get("/~#{metric_id}+Answers.json", endpoint_params = %w[limit offset],
+        response = get("/#{str_identifier(metric_id)}+Answers.json", endpoint_params = %w[limit offset],
                        filters = %w[year verification value value_from value_to status source updated updater published
                                     dataset company_id company_name company_category company_group country], params)
 
@@ -194,7 +195,7 @@ module Wikirate4ruby
 
       def get_company_answers(identifier, params = {})
         answers = []
-        endpoint = !(identifier.is_a? String) ? "/~#{identifier}+Answers.json" : "/#{identifier}+Answers.json"
+        endpoint = "/#{str_identifier(identifier)}+Answers.json"
         response = get(endpoint, endpoint_params = %w[limit offset],
                        filters = %w[metric_name designer metric_type value_type research_policy year verification value
                                     value_from value_to status source updated updater published dataset company_id
@@ -208,7 +209,8 @@ module Wikirate4ruby
 
       def get_relationship_answers(metric_name, metric_designer, params = {})
         answers = []
-        response = get("/#{metric_designer}+#{metric_name}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+        response = get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+RelationshipAnswers.json",
+                       endpoint_params = %w[limit offset],
                        filters = %w[year name company_category company_group dataset updated updater source published], params)
 
         response['items'].each do |item|
@@ -219,7 +221,7 @@ module Wikirate4ruby
 
       def get_relationship_answers_by_metric_id(metric_id, params = {})
         answers = []
-        response = get("/~#{metric_id}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
+        response = get("/#{str_identifier(metric_id)}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
                        filters = %w[year name company_category company_group dataset updated updater source published], params)
 
         response['items'].each do |item|
@@ -382,9 +384,7 @@ module Wikirate4ruby
       private
 
       def get_entity(identifier, klass)
-        return klass.new(request(:get, "/~#{identifier}.json")) unless identifier.is_a? String
-
-        klass.new(request(:get, "/#{identifier}.json"))
+        klass.new(request(:get, "/#{str_identifier(identifier)}.json"))
       end
 
       # @param [String] endpoint
@@ -486,7 +486,13 @@ module Wikirate4ruby
       end
 
       def str_identifier(identifier)
-        (identifier.is_a? String) ? "#{identifier}" : "~#{identifier}"
+        (identifier.is_a? String) ? "#{tranform_to_wr_friendly_name(identifier)}" : "~#{identifier}"
+      end
+
+      def tranform_to_wr_friendly_name(name)
+        name = name.gsub(%r{,|\.|/|\(|\)|&|;|@|#|\^|!|=|"|'|%|-}, ' ').squeeze(' ')
+        name.strip!
+        name.gsub(/ /, '_')
       end
     end
   end

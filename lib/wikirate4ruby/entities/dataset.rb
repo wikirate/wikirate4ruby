@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[answers metrics companies license].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(dataset)
+        super dataset
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Dataset but a #{@type}" if @type != 'Data Set'
 
         @answers = get_array_of 'items', Answer

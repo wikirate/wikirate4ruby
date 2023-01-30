@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[researchers].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(research_group)
+        super research_group
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Research Group but a #{@type}" if @type != 'Research Group'
 
         @researchers = get_content 'researchers'

@@ -7,8 +7,8 @@ module Wikirate4ruby
        answers year].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(source)
+        super source
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Source but a #{@type}" if @type != 'Source'
 
         @title = get_content 'title'

@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[headquarters wikipedia aliases open_corporates os_id cik answers_url].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(company)
+        super company
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Company but a #{@type}" if @type != "Company"
 
         @headquarters = get_content 'headquarters'

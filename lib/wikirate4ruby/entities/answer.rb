@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[company year value comments record_url metric_name metric_designer sources checked_by].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(answer)
+        super answer
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not an Answer but a #{@type}" unless @type.include? 'Answer'
 
         @metric_name = get_content('name').split('+')[1]

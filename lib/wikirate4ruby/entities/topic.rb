@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[bookmarkers metrics datasets].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(topic)
+        super topic
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Topic but a #{@type}" if @type != 'Topic'
 
         @bookmarkers = get_content 'bookmarkers'

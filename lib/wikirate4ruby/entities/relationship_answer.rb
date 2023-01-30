@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[metric_id inverse_metric_id subject_company subject_company_id object_company object_company_id].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(relationship_answer)
+        super relationship_answer
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not an Relationship Answer but a #{@type}" if @type != 'Relationship Answer'
 
         @metric_id = get_content 'metric_id'

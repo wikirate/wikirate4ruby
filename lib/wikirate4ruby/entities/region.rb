@@ -6,8 +6,8 @@ module Wikirate4ruby
       ATTRIBUTES = %i[jurisdiction_code ilo_region country].freeze
       attr_reader(*ATTRIBUTES)
 
-      def initialize(metric)
-        super metric
+      def initialize(region)
+        super region
         raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Region but a #{@type}" if @type != 'Region'
 
         @jurisdiction_code = @data["items"][1]["content"]

@@ -12,6 +12,7 @@ require_relative 'entities/region'
 require_relative 'entities/checked_by'
 require_relative './request'
 require_relative './utils'
+require_relative './request_utils'
 require 'json'
 require 'logger'
 
@@ -20,6 +21,7 @@ module Wikirate4ruby
     class Client
       include Wikirate4ruby::Entities
       include Wikirate4ruby::Utils
+      include Wikirate4ruby::RequestUtils
 
       BASE_URL = 'https://wikirate.org'
       attr :request

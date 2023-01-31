@@ -9,6 +9,7 @@ Examples
 - [Get Metric](Get%20Metric.md#get-metric)
 - [Get Metrics](Get%20Metrics.md#get-metrics)
 - [Get Source](Get%20Source.md#get-source)
+- [Get Sources](Get%20Sources.md#get-sources)
 - [Get Answer](Get%20Answer.md#get-answer)
 - [Get Answers](Get%20Answers.md#get-answers)
 - [Get Answers By Metric ID](Get%20Answers.md#get-answers-by-metric-id)

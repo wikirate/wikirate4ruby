@@ -10,7 +10,7 @@ dynamically calculated from other answers. [Learn More](https://wikirate.org/Abo
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be
 found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/blob/main/examples/Configuration.md)
 
-The `get_metrics` method take as an input a `Hash` where the user can define the parameters of they request. More
+The `get_metrics` method take as an input a `Hash` where the user can define the parameters of their request. More
 specifically, we could divide our params in two different types of parameters, the endpoint parameters and the filter
 parameters. The endpoint parameters help us to iterate through our query's results and the filter parameters allow us to
 restrict our results based on specific given input.

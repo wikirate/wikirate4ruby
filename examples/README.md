@@ -13,6 +13,8 @@ Examples
 - [Get Answers](Get%20Answers.md#get-answers)
 - [Get Answers By Metric ID](Get%20Answers.md#get-answers-by-metric-id)
 - [Get Relationship Answer](Get%20Relationship%20Answer.md#get-relationship-answer)
+- [Get Relationship Answers](Get%20Relationship%20Answers.md#get-relationship-answers)
+- [Get Relationship Answers By Metric ID](Get%20Relationship%20Answers.md#get-relationship-answers-by-metric-id)
 - [Get Topic](Get%20Topic.md#get-topic)
 - [Get Dataset](Get%20Dataset.md#get-dataset)
 - [Get Company Group](Get%20Company%20Group.md#get-company-group)

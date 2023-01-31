@@ -19,5 +19,6 @@ Examples
 - [Get Topic](Get%20Topic.md#get-topic)
 - [Get Dataset](Get%20Dataset.md#get-dataset)
 - [Get Company Group](Get%20Company%20Group.md#get-company-group)
+- [Get Company Groups](Get%20Company%20Groups.md#get-company-groups)
 - [Get Research Group](Get%20Research%20Group.md#get-research-group)
 - [Get Project](Get%20Project.md#get-project)

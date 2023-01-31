@@ -7,6 +7,7 @@ Examples
 - [Get Company](Get%20Company.md#get-company)
 - [Get Companies](Get%20Companies.md#get-companies)
 - [Get Metric](Get%20Metric.md#get-metric)
+- [Get Metrics](Get%20Metrics.md#get-metrics)
 - [Get Source](Get%20Source.md#get-source)
 - [Get Answer](Get%20Answer.md#get-answer)
 - [Get Relationship Answer](Get%20Relationship%20Answer.md#get-relationship-answer)

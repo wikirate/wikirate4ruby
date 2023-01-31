@@ -5,6 +5,7 @@ Examples
     - [API-Key](Configuration.md#api-key)
     - [Authentication](Configuration.md#authentication)
 - [Get Company](Get%20Company.md#get-company)
+- [Get Companies](Get%20Companies.md#get-companies)
 - [Get Metric](Get%20Metric.md#get-metric)
 - [Get Source](Get%20Source.md#get-source)
 - [Get Answer](Get%20Answer.md#get-answer)

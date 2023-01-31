@@ -28,7 +28,7 @@ filter params:
 
 </div>
 
-In the example below, we are looking for all the currently active projects_.
+In the example below, we are looking for all the currently active projects.
 
 ```ruby
 projects = client.get_projects({ 'wikirate_status' => 'active' })

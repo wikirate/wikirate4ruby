@@ -10,6 +10,7 @@ Examples
 - [Get Metrics](Get%20Metrics.md#get-metrics)
 - [Get Source](Get%20Source.md#get-source)
 - [Get Answer](Get%20Answer.md#get-answer)
+- [Get Answers](Get%20Answers.md#get-answers)
 - [Get Relationship Answer](Get%20Relationship%20Answer.md#get-relationship-answer)
 - [Get Topic](Get%20Topic.md#get-topic)
 - [Get Dataset](Get%20Dataset.md#get-dataset)

@@ -21,4 +21,5 @@ Examples
 - [Get Company Group](Get%20Company%20Group.md#get-company-group)
 - [Get Company Groups](Get%20Company%20Groups.md#get-company-groups)
 - [Get Research Group](Get%20Research%20Group.md#get-research-group)
+- [Get Research Groups](Get%20Research%20Groups.md#get-research-groups)
 - [Get Project](Get%20Project.md#get-project)

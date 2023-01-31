@@ -23,3 +23,4 @@ Examples
 - [Get Research Group](Get%20Research%20Group.md#get-research-group)
 - [Get Research Groups](Get%20Research%20Groups.md#get-research-groups)
 - [Get Project](Get%20Project.md#get-project)
+- [Get Projects](Get%20Projects.md#get-projects)

@@ -17,6 +17,7 @@ Examples
 - [Get Relationship Answers](Get%20Relationship%20Answers.md#get-relationship-answers)
 - [Get Relationship Answers By Metric ID](Get%20Relationship%20Answers.md#get-relationship-answers-by-metric-id)
 - [Get Topic](Get%20Topic.md#get-topic)
+- [Get Topics](Get%20Topics.md#get-topics)
 - [Get Dataset](Get%20Dataset.md#get-dataset)
 - [Get Company Group](Get%20Company%20Group.md#get-company-group)
 - [Get Company Groups](Get%20Company%20Groups.md#get-company-groups)

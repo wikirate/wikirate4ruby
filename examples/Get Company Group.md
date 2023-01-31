@@ -3,9 +3,9 @@
 _Company groups select and store Companies according to user preference. Users can group companies according to selected
 companies or metric answer values or ranges. Company groups help users to frame research, analysis and comparison._
 
-    - used to help define the scope of Datasets and Projects, and
+    - _used to help define the scope of Datasets and Projects, and_
 
-    - used to set applicability parameters on Metrics.
+    - _used to set applicability parameters on Metrics._
 
 
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be

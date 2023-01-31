@@ -20,15 +20,15 @@ endpoint params:
 filter params:
 
 - **_name:_** returns companies that contain in their name the given string
-- **_company_category:_** returns companies that belong to a given company category. Available company categories:
-    - Financial: "F"
-    - Health And Education: "H"
-    - Infrastructure: "I"
-    - Manufacturing: "M"
-    - Raw Material Producer: "R"
-    - Science And Technology: "S"
-    - Wholesale And Retail: "W"
-    - Other: "O"
+- **_company_category:_** returns companies that belong to a given company category. Allowed parameter values:
+    - 'F': Financial
+    - 'H': Health And Education
+    - 'I': Infrastructure
+    - 'M': Manufacturing
+    - 'R': Raw Material Producer
+    - 'S': Science And Technology
+    - 'W': Wholesale And Retail
+    - 'O': Other
 - **_company_group:_** returns companies that belong to a given company group name. All wikirate company groups can be
   found [here](https://wikirate.org/Company%20Group).
 - **_country_**: returns companies with headquarters on the given input country. All available wikirate country options

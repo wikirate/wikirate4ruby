@@ -86,3 +86,29 @@ answers = client.get_answers('Direct greenhouse gas (GHG) emissions (Scope 1), G
                                'country' => 'United Kingdom' })
 puts answers
 ```
+
+## Get Answers By Metric ID
+
+The `get_answers_by_metric_id` functions similarly with the `get_answers` method but instead of `metric_name`
+and `metric_designer` gets as an input the `metric_id`.
+
+Thus, the examples equivalent examples of the previous section using the metric_id will be formulated as follows:
+
+In the example below, we are looking for community verified answers of companies with Direct greenhouse gas (GHG)
+emissions (Scope 1) greater or equal to 1M CO2 tonnes in 2021.
+
+```ruby
+answers = client.get_answers(826615, { 'year' => 2021,
+                                       'value_from' => 1000000,
+                                       'verification' => 'community_verified' })
+puts answers
+```
+
+In the example below, we are looking for the latest available data on Direct greenhouse gas (GHG) emissions (Scope 1) of
+companies located in the United Kingdom
+
+```ruby
+answers = client.get_answers(826615, { 'year' => 'latest',
+                                       'country' => 'United Kingdom' })
+puts answers
+```

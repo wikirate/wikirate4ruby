@@ -8,7 +8,7 @@ found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/
 
 WikiRate's REST API allows you to update existing answers. wikirate4ruby provides the
 method `update_research_metric_answer` to allow users to import answers on metrics. The method takes as an input a
-number of parameters where all the information about the new answer is defined. The parameters can be split into
+number of parameters where all the information about the existing answer is defined. The parameters can be split into
 required and optional.
 
 <div style="font-family:'Source Code Pro'; font-size:14px; padding-left: 0.5em; padding-right: 0.5em;">
@@ -22,7 +22,8 @@ required params:
 
 or
 
-- **_answer_id_**: the user can define directly the id of the answer, they want to update, instead of the aformentioned paramaters
+- **_answer_id_**: the user can define directly the id of the answer, they want to update, instead of the aformentioned
+  paramaters
 
 optional params:
 

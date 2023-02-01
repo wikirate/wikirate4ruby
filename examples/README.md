@@ -12,6 +12,8 @@ Examples
 - [Get Metrics](Get%20Metrics.md#get-metrics)
 - [Get Source](Get%20Source.md#get-source)
 - [Get Sources](Get%20Sources.md#get-sources)
+- [Add Source](Add%20Source.md#add-source)
+- [Update Source](Update%20Source.md#update-source)
 - [Get Answer](Get%20Answer.md#get-answer)
 - [Get Answers](Get%20Answers.md#get-answers)
 - [Add Research Metric Answer](Add%20Research%20Metric%20Answer.md#add-research-metric-answer)

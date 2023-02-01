@@ -22,6 +22,8 @@ Examples
 - [Get Relationship Answer](Get%20Relationship%20Answer.md#get-relationship-answer)
 - [Get Relationship Answers](Get%20Relationship%20Answers.md#get-relationship-answers)
 - [Get Relationship Answers By Metric ID](Get%20Relationship%20Answers.md#get-relationship-answers-by-metric-id)
+- [Add Relationship Metric Answer](Add%20Relationship%20Metric%20Answer.md#add-relationship-metric-answer)
+- [Update Relationship Metric Answer](Update%20Relationship%20Metric%20Answer.md#update-relationship-metric-answer)
 - [Get Topic](Get%20Topic.md#get-topic)
 - [Get Topics](Get%20Topics.md#get-topics)
 - [Get Dataset](Get%20Dataset.md#get-dataset)

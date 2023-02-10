@@ -84,3 +84,9 @@ the [code of conduct](https://github.com/[USERNAME]/wikirate4ruby/blob/master/CO
 
 Everyone interacting in the Wikirate4ruby project's codebases, issue trackers, chat rooms and mailing lists is expected
 to follow the [code of conduct](https://github.com/wikirate/wikirate4ruby/blob/master/CODE_OF_CONDUCT.md).
+
+## 🎉 Acknowledgements
+
+This project was supported by [NLnet foundation](https://nlnet.nl/).
+
+![Image](https://nlnet.nl/logo/banner-160x60.png)

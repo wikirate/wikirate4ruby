@@ -7,7 +7,7 @@ require_relative 'entities/dataset'
 require_relative 'entities/research_group'
 require_relative 'entities/company_group'
 require_relative 'entities/answer'
-require_relative 'entities/relationship_answer'
+require_relative 'entities/relationship'
 require_relative 'entities/region'
 require_relative 'entities/checked_by'
 require_relative './request'
@@ -43,8 +43,8 @@ module Wikirate4ruby
         get_entity(identifier, Answer)
       end
 
-      def get_relationship_answer(identifier)
-        get_entity(identifier, RelationshipAnswer)
+      def get_relationship(identifier)
+        get_entity(identifier, Relationship)
       end
 
       def get_dataset(identifier)
@@ -210,25 +210,25 @@ module Wikirate4ruby
         answers
       end
 
-      def get_relationship_answers(metric_name, metric_designer, params = {})
+      def get_relationships(metric_name, metric_designer, params = {})
         answers = []
-        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+RelationshipAnswers.json",
+        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+Relationships.json",
                                 endpoint_params = %w[limit offset],
-                                filters = %w[year name company_category company_group dataset updated updater source published], params)
+                                filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
 
         response['items'].each do |item|
-          answers.append(RelationshipAnswer.new(item))
+          answers.append(Relationship.new(item))
         end
         answers
       end
 
-      def get_relationship_answers_by_metric_id(metric_id, params = {})
+      def get_relationships_by_metric_id(metric_id, params = {})
         answers = []
-        response = @request.get("/#{str_identifier(metric_id)}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
-                                filters = %w[year name company_category company_group dataset updated updater source published], params)
+        response = @request.get("/#{str_identifier(metric_id)}+Relationships.json", endpoint_params = %w[limit offset],
+                                filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
 
         response['items'].each do |item|
-          answers.append(RelationshipAnswer.new(item))
+          answers.append(Relationships.new(item))
         end
         answers
       end
@@ -312,7 +312,7 @@ module Wikirate4ruby
         Answer.new(response)
       end
 
-      def add_relationship_metric_answer(data = {})
+      def add_relationship(data = {})
         required_params = %w[metric_designer metric_name subject_company object_company year value source]
         required_params.each do |param|
           if data[param].nil? || data[param] == ''
@@ -324,13 +324,13 @@ module Wikirate4ruby
         %w[metric_designer metric_name subject_company object_company year].each do |key|
           data.delete key
         end
-        params = creation_params('RelationshipAnswer', data, %w[source value comments])
+        params = creation_params('Relationship', data, %w[source value comments])
         params['card[name]'] = card_name
         response = @request.post('/card/create', params)
-        RelationshipAnswer.new(response)
+        Relationship.new(response)
       end
 
-      def update_relationship_metric_answer(data = {})
+      def update_relationship(data = {})
         required_params = %w[metric_designer metric_name subject_company object_company year]
         if data['answer_id'].nil?
           required_params.each do |param|
@@ -350,9 +350,9 @@ module Wikirate4ruby
           allowed_params = %w[year source value discussion]
         end
 
-        params = creation_params('RelationshipAnswer', data, allowed_params)
+        params = creation_params('Relationship', data, allowed_params)
         response = @request.post("/update/#{card_name}", params)
-        RelationshipAnswer.new(response)
+        Relationship.new(response)
       end
 
       # @param [Hash] data

@@ -1,13 +1,13 @@
-## Get Relationship Answers
+## Get Relationships
 
 _Wikirate platform can host answers that respond to relationship questions between companies. For instance, which
-companies supplied company A in 2022? Relationship answers respond to such questions (metrics with metric type
-Relationship Metric)._
+companies supplied company A in 2022? Relationships respond to such questions (metrics with metric type
+Relation Metric)._
 
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be
 found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/blob/main/examples/Configuration.md)
 
-The `get_relationship answers` method take as an input the `metric_name`, `metric_designer` and a `Hash` where the user
+The `get_relationships` method take as an input the `metric_name`, `metric_designer` and a `Hash` where the user
 can define the parameters of their request. More specifically, we could divide our params in two different types of
 parameters, the endpoint parameters and the filter parameters. The endpoint parameters help us to iterate through our
 query's results and the filter parameters allow us to restrict our results based on specific given input.
@@ -29,16 +29,16 @@ filter params:
 In the example below, we are looking for Adidas AG suppliers in 2021.
 
 ```ruby
-relationship_answers = client.get_relationship_answers('Supplied By',
-                                                       'Commons',
-                                                       { 'year' => 2021,
-                                                         'name' => 'Adidas AG' })
-puts relationship_answers
+relationships = client.get_relationships('Supplied By',
+                                         'Commons',
+                                         { 'year' => 2021,
+                                           'name' => 'Adidas AG' })
+puts relationships
 ```
 
-## Get Relationship Answers By Metric ID
+## Get Relationships By Metric ID
 
-The `get_relationship_answers_by_metric_id` functions similarly with the `get_relationship_answers` method but instead
+The `get_relationships_by_metric_id` functions similarly with the `get_relationships` method but instead
 of `metric_name` and `metric_designer` gets as an input the `metric_id`.
 
 Thus, the examples equivalent examples of the previous section using the metric_id will be formulated as follows:
@@ -46,8 +46,8 @@ Thus, the examples equivalent examples of the previous section using the metric_
 In the example below, we are looking for Adidas AG suppliers in 2021.
 
 ```ruby
-relationship_answers = client.get_relationship_answers(2929009,
-                                                       { 'year' => 2021,
-                                                         'name' => 'Adidas AG' })
-puts relationship_answers
+relationships = client.get_relationships(2929009,
+                                         { 'year' => 2021,
+                                           'name' => 'Adidas AG' })
+puts relationships
 ```

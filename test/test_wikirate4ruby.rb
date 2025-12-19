@@ -29,8 +29,8 @@ class TestWikirate4ruby < Minitest::Test
     assert @client.get_answer(13_727_963).is_a? Answer
   end
 
-  def test_get_relationship_answer
-    assert @client.get_relationship_answer(14_478_531).is_a? Answer
+  def test_get_relationship
+    assert @client.get_relationship(14_478_531).is_a? Answer
   end
 
   def test_get_topic
@@ -75,10 +75,10 @@ class TestWikirate4ruby < Minitest::Test
     assert answers[0].is_a? Answer
   end
 
-  def test_get_relationship_answers
-    answers = @client.get_relationship_answers("Supplied_by", "Commons")
+  def test_get_relationships
+    answers = @client.get_relationships("Supplied_by", "Commons")
     assert answers.length == 20
-    assert answers[0].is_a? RelationshipAnswer
+    assert answers[0].is_a? Relationship
   end
 
   def test_get_topics

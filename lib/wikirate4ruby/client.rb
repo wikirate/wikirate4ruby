@@ -7,7 +7,7 @@ require_relative 'entities/dataset'
 require_relative 'entities/research_group'
 require_relative 'entities/company_group'
 require_relative 'entities/answer'
-require_relative 'entities/relationship_answer'
+require_relative 'entities/relationship'
 require_relative 'entities/region'
 require_relative 'entities/checked_by'
 require_relative './request'
@@ -43,8 +43,8 @@ module Wikirate4ruby
         get_entity(identifier, Answer)
       end
 
-      def get_relationship_answer(identifier)
-        get_entity(identifier, RelationshipAnswer)
+      def get_relationship(identifier)
+        get_entity(identifier, Relationship)
       end
 
       def get_dataset(identifier)
@@ -86,7 +86,7 @@ module Wikirate4ruby
       def get_companies(params = {})
         companies = []
         response = @request.get('/Companies.json', endpoint_params = %w[limit offset],
-                                filters = %w[name company_category company_group country], params)
+                                filters = %w[name company_category company_group country company_identifier], params)
 
         response['items'].each do |item|
           companies.append(Company.new(item))
@@ -97,7 +97,7 @@ module Wikirate4ruby
       def get_metrics(params = {})
         metrics = []
         response = @request.get('/Metrics.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark wikirate_topic designer published metric_type value_type research_policy dataset], params)
+                                filters = %w[metric_keyword bookmark topic topic_framework designer published metric_type value_type assessment dataset], params)
 
         response['items'].each do |item|
           metrics.append(Metric.new(item))
@@ -108,7 +108,7 @@ module Wikirate4ruby
       def get_topics(params = {})
         topics = []
         response = @request.get('/Topics.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark], params)
+                                filters = %w[name topic_framework bookmark], params)
 
         response['items'].each do |item|
           topics.append(Topic.new(item))
@@ -118,8 +118,8 @@ module Wikirate4ruby
 
       def get_datasets(params = {})
         datasets = []
-        response = @request.get('/Data_Sets.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark wikirate_topic], params)
+        response = @request.get('/Datasets.json', endpoint_params = %w[limit offset],
+                                filters = %w[name bookmark topic], params)
 
         response['items'].each do |item|
           datasets.append(Dataset.new(item))
@@ -141,7 +141,7 @@ module Wikirate4ruby
       def get_sources(params = {})
         sources = []
         response = @request.get('/Sources.json', endpoint_params = %w[limit offset],
-                                filters = %w[name wikirate_title wikirate_topic report_type year wikirate_link company_name], params)
+                                filters = %w[name wikirate_title report_type year wikirate_link company], params)
 
         response['items'].each do |item|
           sources.append(Source.new(item))
@@ -152,7 +152,7 @@ module Wikirate4ruby
       def get_research_groups(params = {})
         research_groups = []
         response = @request.get('/Research_Groups.json', endpoint_params = %w[limit offset],
-                                filters = %w[name], params)
+                                filters = %w[name topic bookmark], params)
 
         response['items'].each do |item|
           research_groups.append(ResearchGroup.new(item))
@@ -163,7 +163,7 @@ module Wikirate4ruby
       def get_company_groups(params = {})
         company_groups = []
         response = @request.get('/Company_Groups.json', endpoint_params = %w[limit offset],
-                                filters = %w[name], params)
+                                filters = %w[name topic bookmark], params)
 
         response['items'].each do |item|
           company_groups.append(CompanyGroup.new(item))
@@ -171,24 +171,24 @@ module Wikirate4ruby
         company_groups
       end
 
-      def get_answers(metric_name, metric_designer, params = {})
+      def get_answers(metric_name: nil, metric_designer: nil, identifier: nil, params: {})
         answers = []
-        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+Answers.json",
-                                endpoint_params = %w[limit offset],
-                                filters = %w[year verification value value_from value_to status source updated updater published
-                                    dataset company_id company_name company_category company_group country], params)
 
-        response['items'].each do |item|
-          answers.append(Answer.new(item))
-        end
-        answers
-      end
+        entity_id =
+          if metric_name && metric_designer
+            "#{metric_designer}+#{metric_name}"
+          else
+            identifier
+          end
 
-      def get_answers_by_metric_id(metric_id, params = {})
-        answers = []
-        response = @request.get("/#{str_identifier(metric_id)}+Answers.json", endpoint_params = %w[limit offset],
-                                filters = %w[year verification value value_from value_to status source updated updater published
-                                    dataset company_id company_name company_category company_group country], params)
+        endpoint = construct_endpoint(entity_type: 'Answers', entity_id: entity_id)
+
+        response = @request.get(
+          "/#{endpoint}",
+          endpoint_params = %w[limit offset view],
+          filters = %w[year status company_group country value value_from value_to updated company company_keyword dataset updater source verification bookmark published metric_keyword designer metric_type metric sort_by sort_dir topic topic_framework value_type assessment],
+          params
+        )
 
         response['items'].each do |item|
           answers.append(Answer.new(item))
@@ -200,9 +200,8 @@ module Wikirate4ruby
         answers = []
         endpoint = "/#{str_identifier(identifier)}+Answers.json"
         response = @request.get(endpoint, endpoint_params = %w[limit offset],
-                                filters = %w[metric_name designer metric_type value_type research_policy year verification value
-                                    value_from value_to status source updated updater published dataset company_id
-                                    company_name company_category company_group country], params)
+                                filters = %w[year status value value_from value_to updated dataset updater source verification bookmark published metric_keyword designer metric_type metric sort_by sort_dir topic topic_framework value_type assessment],
+                                params)
 
         response['items'].each do |item|
           answers.append(Answer.new(item))
@@ -210,25 +209,25 @@ module Wikirate4ruby
         answers
       end
 
-      def get_relationship_answers(metric_name, metric_designer, params = {})
+      def get_relationships(metric_name: nil, metric_designer: nil, identifier: nil, params: {})
         answers = []
-        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+RelationshipAnswers.json",
-                                endpoint_params = %w[limit offset],
-                                filters = %w[year name company_category company_group dataset updated updater source published], params)
+
+        entity_id =
+          if metric_name && metric_designer
+            "#{metric_designer}+#{metric_name}"
+          else
+            identifier
+          end
+
+        endpoint = construct_endpoint(entity_type: 'Relationships', entity_id: entity_id)
+
+        response = @request.get(
+          "/#{endpoint}",
+          endpoint_params = %w[limit offset],
+          filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
 
         response['items'].each do |item|
-          answers.append(RelationshipAnswer.new(item))
-        end
-        answers
-      end
-
-      def get_relationship_answers_by_metric_id(metric_id, params = {})
-        answers = []
-        response = @request.get("/#{str_identifier(metric_id)}+RelationshipAnswers.json", endpoint_params = %w[limit offset],
-                                filters = %w[year name company_category company_group dataset updated updater source published], params)
-
-        response['items'].each do |item|
-          answers.append(RelationshipAnswer.new(item))
+          answers.append(Relationship.new(item))
         end
         answers
       end
@@ -245,7 +244,7 @@ module Wikirate4ruby
         end
         card_name = data['name']
         data.delete('name')
-        params = creation_params('Company', data, %w[headquarters oar_id wikipedia open_corporates sec_cik])
+        params = creation_params('Company', data, %w[headquarters open_supply_id wikipedia open_corporates_id sec_central_index_key legal_entity_identifier wikidata_id australian_business_number australian_company_number international_securities_identification_number])
         params['card[name]'] = card_name
         params['confirmed'] = true
         params['card[skip]'] = 'update_oc_mapping_due_to_headquarters_entry' if data['open_corporates'].nil?
@@ -261,13 +260,13 @@ module Wikirate4ruby
         card_name = str_identifier(data['company'])
         data.delete 'company'
 
-        params = creation_params('Company', data, %w[headquarters open_corporates oar_id wikipedia sec_cik])
+        params = creation_params('Company', data, %w[headquarters open_supply_id wikipedia open_corporates_id sec_central_index_key legal_entity_identifier wikidata_id australian_business_number australian_company_number international_securities_identification_number])
         params['card[name]'] = card_name
         response = @request.post('/card/update', params)
         Company.new(response)
       end
 
-      def add_research_metric_answer(data = {})
+      def add_answer(data = {})
         required_params = %w[metric_designer metric_name company year value source]
         required_params.each do |param|
           if data[param].nil? || data[param] == ''
@@ -285,7 +284,7 @@ module Wikirate4ruby
         Answer.new(response)
       end
 
-      def update_research_metric_answer(data = {})
+      def update_answer(data = {})
         required_params = %w[metric_designer metric_name company]
         if data['answer_id'].nil?
           required_params.each do |param|
@@ -312,7 +311,7 @@ module Wikirate4ruby
         Answer.new(response)
       end
 
-      def add_relationship_metric_answer(data = {})
+      def add_relationship(data = {})
         required_params = %w[metric_designer metric_name subject_company object_company year value source]
         required_params.each do |param|
           if data[param].nil? || data[param] == ''
@@ -324,13 +323,13 @@ module Wikirate4ruby
         %w[metric_designer metric_name subject_company object_company year].each do |key|
           data.delete key
         end
-        params = creation_params('RelationshipAnswer', data, %w[source value comments])
+        params = creation_params('Relationship', data, %w[source value comments])
         params['card[name]'] = card_name
         response = @request.post('/card/create', params)
-        RelationshipAnswer.new(response)
+        Relationship.new(response)
       end
 
-      def update_relationship_metric_answer(data = {})
+      def update_relationship(data = {})
         required_params = %w[metric_designer metric_name subject_company object_company year]
         if data['answer_id'].nil?
           required_params.each do |param|
@@ -350,9 +349,9 @@ module Wikirate4ruby
           allowed_params = %w[year source value discussion]
         end
 
-        params = creation_params('RelationshipAnswer', data, allowed_params)
+        params = creation_params('Relationship', data, allowed_params)
         response = @request.post("/update/#{card_name}", params)
-        RelationshipAnswer.new(response)
+        Relationship.new(response)
       end
 
       # @param [Hash] data

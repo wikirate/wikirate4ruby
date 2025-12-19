@@ -29,12 +29,12 @@ class TestWikirate4ruby < Minitest::Test
     assert @client.get_answer(13_727_963).is_a? Answer
   end
 
-  def test_get_relationship_answer
-    assert @client.get_relationship_answer(14_478_531).is_a? Answer
+  def test_get_relationship
+    assert @client.get_relationship(14_478_531).is_a? Answer
   end
 
   def test_get_topic
-    assert @client.get_topic("Environment").is_a? Topic
+    assert @client.get_topic("Wikirate ESG Topics+Environment").is_a? Topic
   end
 
   def test_get_source
@@ -50,7 +50,7 @@ class TestWikirate4ruby < Minitest::Test
   end
 
   def test_get_project
-    assert @client.get_project(14_495_617).is_a? Card
+    assert @client.get_project(22801903).is_a? Card
   end
 
   def test_get_dataset
@@ -70,15 +70,16 @@ class TestWikirate4ruby < Minitest::Test
   end
 
   def test_get_answers
-    answers = @client.get_answers("Direct_greenhouse_gas_GHG_emissions_Scope_1_GRI_305_1_a_formerly_G4_EN15_a", "Global_Reporting_Initiative")
+    answers = @client.get_answers(metric_name: "Direct_greenhouse_gas_GHG_emissions_Scope_1_GRI_305_1_a_formerly_G4_EN15_a",
+                                  metric_designer: "Global_Reporting_Initiative")
     assert answers.length == 20
     assert answers[0].is_a? Answer
   end
 
-  def test_get_relationship_answers
-    answers = @client.get_relationship_answers("Supplied_by", "Commons")
+  def test_get_relationships
+    answers = @client.get_relationships(metric_name: "Supplied_by", metric_designer: "Commons")
     assert answers.length == 20
-    assert answers[0].is_a? RelationshipAnswer
+    assert answers[0].is_a? Relationship
   end
 
   def test_get_topics

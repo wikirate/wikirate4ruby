@@ -8,7 +8,7 @@ module Wikirate4ruby
 
       def initialize(dataset)
         super dataset
-        raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Dataset but a #{@type}" if @type != 'Data Set'
+        raise parsing_error name = "IncompatibleCardType", message = "The input Card is not a Dataset but a #{@type}" if @type != 'Dataset'
 
         @answers = get_array_of 'items', Answer
         @metrics = get_content 'metrics'

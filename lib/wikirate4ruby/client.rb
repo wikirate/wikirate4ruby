@@ -108,7 +108,7 @@ module Wikirate4ruby
       def get_topics(params = {})
         topics = []
         response = @request.get('/Topics.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark], params)
+                                filters = %w[name topic_framework bookmark], params)
 
         response['items'].each do |item|
           topics.append(Topic.new(item))

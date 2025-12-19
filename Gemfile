@@ -11,6 +11,10 @@ gem 'minitest', '~> 5.0'
 
 gem 'faraday'
 
+group :development, :test do
+  gem "standard", require: false
+end
+
 group :test do
   gem 'dotenv'
 end

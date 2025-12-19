@@ -19,10 +19,16 @@ endpoint params:
 filter params:
 
 - **_name:_** returns topics that contain in their name the given string
+- **_topic_framework:_** returns topics based on the defined Topic Framework, allowed paremeter values:
+
+  - `Wikirate ESG Topics`
+  - `ESRS Standards`
+  - `GRI Standards`
+  - `UN SDGs`
 - **_bookmark_**: returns the topics you have bookmarked, allowed parameter values:
 
-  - 'bookmark'
-  - 'nobookmark'
+  - `bookmark`
+  - `nobookmark`
 
 </div>
 
@@ -30,5 +36,12 @@ In the example below, we are looking for topics that contain on their name the s
 
 ```ruby
 topics = client.get_topics({ 'name' => 'environment' })
+puts topics
+```
+
+In the example below, we are looking for topics under the GRI Standards framework.
+
+```ruby
+topics = client.get_topics({ 'topic_framework' => 'GRI Standards' })
 puts topics
 ```

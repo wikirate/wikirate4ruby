@@ -1,4 +1,4 @@
-## Add Research Metric Answer
+## Update Answer
 
 _Wikirate platform helps users to find/research answers on specific questions/metrics about companies. Thus, each answer
 is described by the question/metric, company, value, year and source._
@@ -38,10 +38,10 @@ required parameters have been defined a new answer will be created (from the exa
 creating a new answer if that answer does not exist)
 
 ```ruby
-updated_answer = client.update_research_metric_answer({ 'metric_designer' => 'Walk Free',
-                                                        'metric_name' => 'MSA Whistleblowing mechanism',
-                                                        'company' => 'AIB Group plc',
-                                                        'year' => 2017,
-                                                        'value' => 'Supply Chain Workers' })
+updated_answer = client.update_answer({ 'metric_designer' => 'Walk Free',
+                                        'metric_name' => 'MSA Whistleblowing mechanism',
+                                        'company' => 'AIB Group plc',
+                                        'year' => 2017,
+                                        'value' => 'Supply Chain Workers' })
 ```
 

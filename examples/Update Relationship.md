@@ -1,14 +1,14 @@
-## Update Relationship Metric Answer
+## Update Relationship
 
 _Wikirate platform can host answers that respond to relationship questions between companies. For instance, which
-companies supplied company A in 2022? Relationship answers respond to such questions (metrics with metric type
-Relationship Metric)._
+companies supplied company A in 2022? Relationships respond to such questions (metrics with metric type
+Relation Metric)._
 
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be
 found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/blob/main/examples/Configuration.md)
 
 WikiRate's REST API allows you to not only to import but also update existing relationships. wikirate4ruby provides the
-method `udpate_relationship_metric_answer` to facilitate this functionality. The method takes as an input a number of
+method `udpate_relationship` to facilitate this functionality. The method takes as an input a number of
 parameters where all the information about the existing relationship and updated fields is defined. The parameters can
 be split into required and optional.
 
@@ -38,6 +38,6 @@ optional params:
 The example below demonstrates the import of a relationship to the _Commons_ metric _Supplied By_
 
 ```ruby
-updated_relationship = client.update_relationship_metric_answer({ 'answer_id' => 6228782,
-                                                                  'year' => 2018 })
+updated_relationship = client.update_relationship({ 'answer_id' => 6228782,
+                                                    'year' => 2018 })
 ```

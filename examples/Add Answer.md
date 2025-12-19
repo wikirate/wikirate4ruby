@@ -1,4 +1,4 @@
-## Add Research Metric Answer
+## Add Answer
 
 _Wikirate platform helps users to find/research answers on specific questions/metrics about companies. Thus, each answer
 is described by the question/metric, company, value, year and source._
@@ -7,7 +7,7 @@ This example assumes you have configured your Wikirate REST `client`. Instructio
 found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/blob/main/examples/Configuration.md)
 
 WikiRate's REST API allows you to import answers on metrics about companies. wikirate4ruby provides the
-method `add_research_metric_answer` to allow users to import answers on metrics. The method takes as an input a number
+method `add_answer` to allow users to import answers on metrics. The method takes as an input a number
 of parameters where all the information about the new answer is defined. The parameters can be split into required and
 optional.
 
@@ -31,11 +31,11 @@ optional params:
 In the example below demonstrates the import of an answer to the _Walk Free_'s metric _MSA Whistleblowing mechanism_
 
 ```ruby
-answer = client.add_research_metric_answer({ 'metric_designer' => 'Walk Free',
-                                             'metric_name' => 'MSA Whistleblowing mechanism',
-                                             'company' => 'AIB Group plc',
-                                             'year' => 2018,
-                                             'value' => 'Employees and Supply Chain Workers',
-                                             'source' => 'Source-000089259' })
+answer = client.add_answer({ 'metric_designer' => 'Walk Free',
+                             'metric_name' => 'MSA Whistleblowing mechanism',
+                             'company' => 'AIB Group plc',
+                             'year' => 2018,
+                             'value' => 'Employees and Supply Chain Workers',
+                             'source' => 'Source-000089259' })
 ```
 

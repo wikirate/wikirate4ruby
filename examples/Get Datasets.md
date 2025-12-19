@@ -1,6 +1,6 @@
-## Get Projects
+## Get Datasets
 
-_Data Sets help structure information on WikiRate by combining Companies and Metrics associated with a particular Topic
+_Datasets help structure information on WikiRate by combining Companies and Metrics associated with a particular Topic
 or theme._
 
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be

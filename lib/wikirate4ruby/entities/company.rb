@@ -1,9 +1,8 @@
 require_relative '../error'
-
 module Wikirate4ruby
   module Entities
     class Company < Entities::Card
-      ATTRIBUTES = %i[headquarters wikipedia aliases open_corporates os_id cik answers_url].freeze
+      ATTRIBUTES = %i[headquarters wikipedia aliases open_corporates os_id cik legal_entity_identifier isin uk_company_number australian_company_number australian_business_number wikidata_id answers_url].freeze
       attr_reader(*ATTRIBUTES)
 
       def initialize(company)
@@ -13,13 +12,17 @@ module Wikirate4ruby
         @headquarters = get_content 'headquarters'
         @wikipedia = get_content 'wikipedia'
         @aliases = get_content 'aliases'
-        @open_corporates = get_content 'open_corporates'
-        @os_id = get_content 'oar_id'
-        @cik = get_content 'cik'
+        @open_corporates = get_content 'open_corporates_id'
+        @os_id = get_content 'open_supply_id'
+        @cik = get_content 'sec_central_index_key'
+        @legal_entity_identifier = get_content 'legal_entity_identifier'
+        @isin = get_array_of 'international_securities_identification_number', String
+        @uk_company_number = get_content 'uk_company_number'
+        @australian_company_number = get_content 'australian_company_number'
+        @australian_business_number = get_content 'australian_business_number'
+        @wikidata_id = get_content 'wikidata_id'
         @answers_url = get_content 'answers_url'
-
       end
-
     end
   end
 end

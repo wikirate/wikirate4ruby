@@ -118,7 +118,7 @@ module Wikirate4ruby
 
       def get_datasets(params = {})
         datasets = []
-        response = @request.get('/Data_Sets.json', endpoint_params = %w[limit offset],
+        response = @request.get('/Datasets.json', endpoint_params = %w[limit offset],
                                 filters = %w[name bookmark topic], params)
 
         response['items'].each do |item|

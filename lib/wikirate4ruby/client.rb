@@ -86,7 +86,7 @@ module Wikirate4ruby
       def get_companies(params = {})
         companies = []
         response = @request.get('/Companies.json', endpoint_params = %w[limit offset],
-                                filters = %w[name company_category company_group country], params)
+                                filters = %w[name company_category company_group country company_identifier], params)
 
         response['items'].each do |item|
           companies.append(Company.new(item))
@@ -97,7 +97,7 @@ module Wikirate4ruby
       def get_metrics(params = {})
         metrics = []
         response = @request.get('/Metrics.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark wikirate_topic designer published metric_type value_type research_policy dataset], params)
+                                filters = %w[metric_keyword bookmark topic topic_framework designer published metric_type value_type assessment dataset], params)
 
         response['items'].each do |item|
           metrics.append(Metric.new(item))
@@ -119,7 +119,7 @@ module Wikirate4ruby
       def get_datasets(params = {})
         datasets = []
         response = @request.get('/Data_Sets.json', endpoint_params = %w[limit offset],
-                                filters = %w[name bookmark wikirate_topic], params)
+                                filters = %w[name bookmark topic], params)
 
         response['items'].each do |item|
           datasets.append(Dataset.new(item))
@@ -141,7 +141,7 @@ module Wikirate4ruby
       def get_sources(params = {})
         sources = []
         response = @request.get('/Sources.json', endpoint_params = %w[limit offset],
-                                filters = %w[name wikirate_title wikirate_topic report_type year wikirate_link company_name], params)
+                                filters = %w[name wikirate_title report_type year wikirate_link company], params)
 
         response['items'].each do |item|
           sources.append(Source.new(item))
@@ -152,7 +152,7 @@ module Wikirate4ruby
       def get_research_groups(params = {})
         research_groups = []
         response = @request.get('/Research_Groups.json', endpoint_params = %w[limit offset],
-                                filters = %w[name], params)
+                                filters = %w[name topic bookmark], params)
 
         response['items'].each do |item|
           research_groups.append(ResearchGroup.new(item))
@@ -163,7 +163,7 @@ module Wikirate4ruby
       def get_company_groups(params = {})
         company_groups = []
         response = @request.get('/Company_Groups.json', endpoint_params = %w[limit offset],
-                                filters = %w[name], params)
+                                filters = %w[name topic bookmark], params)
 
         response['items'].each do |item|
           company_groups.append(CompanyGroup.new(item))
@@ -244,7 +244,7 @@ module Wikirate4ruby
         end
         card_name = data['name']
         data.delete('name')
-        params = creation_params('Company', data, %w[headquarters oar_id wikipedia open_corporates sec_cik])
+        params = creation_params('Company', data, %w[headquarters open_supply_id wikipedia open_corporates_id sec_central_index_key legal_entity_identifier wikidata_id australian_business_number australian_company_number international_securities_identification_number])
         params['card[name]'] = card_name
         params['confirmed'] = true
         params['card[skip]'] = 'update_oc_mapping_due_to_headquarters_entry' if data['open_corporates'].nil?
@@ -260,13 +260,13 @@ module Wikirate4ruby
         card_name = str_identifier(data['company'])
         data.delete 'company'
 
-        params = creation_params('Company', data, %w[headquarters open_corporates oar_id wikipedia sec_cik])
+        params = creation_params('Company', data, %w[headquarters open_supply_id wikipedia open_corporates_id sec_central_index_key legal_entity_identifier wikidata_id australian_business_number australian_company_number international_securities_identification_number])
         params['card[name]'] = card_name
         response = @request.post('/card/update', params)
         Company.new(response)
       end
 
-      def add_research_metric_answer(data = {})
+      def add_answer(data = {})
         required_params = %w[metric_designer metric_name company year value source]
         required_params.each do |param|
           if data[param].nil? || data[param] == ''
@@ -284,7 +284,7 @@ module Wikirate4ruby
         Answer.new(response)
       end
 
-      def update_research_metric_answer(data = {})
+      def update_answer(data = {})
         required_params = %w[metric_designer metric_name company]
         if data['answer_id'].nil?
           required_params.each do |param|

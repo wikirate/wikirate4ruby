@@ -171,24 +171,24 @@ module Wikirate4ruby
         company_groups
       end
 
-      def get_answers(metric_name, metric_designer, params = {})
+      def get_answers(metric_name: nil, metric_designer: nil, identifier: nil, params: {})
         answers = []
-        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+Answers.json",
-                                endpoint_params = %w[limit offset],
-                                filters = %w[year verification value value_from value_to status source updated updater published
-                                    dataset company_id company_name company_category company_group country], params)
 
-        response['items'].each do |item|
-          answers.append(Answer.new(item))
-        end
-        answers
-      end
+        entity_id =
+          if metric_name && metric_designer
+            "#{metric_designer}+#{metric_name}"
+          else
+            identifier
+          end
 
-      def get_answers_by_metric_id(metric_id, params = {})
-        answers = []
-        response = @request.get("/#{str_identifier(metric_id)}+Answers.json", endpoint_params = %w[limit offset],
-                                filters = %w[year verification value value_from value_to status source updated updater published
-                                    dataset company_id company_name company_category company_group country], params)
+        endpoint = construct_endpoint(entity_type: 'Answers', entity_id: entity_id)
+
+        response = @request.get(
+          "/#{endpoint}",
+          endpoint_params = %w[limit offset view],
+          filters = %w[year status company_group country value value_from value_to updated company company_keyword dataset updater source verification bookmark published metric_keyword designer metric_type metric sort_by sort_dir topic topic_framework value_type assessment],
+          params
+        )
 
         response['items'].each do |item|
           answers.append(Answer.new(item))
@@ -212,7 +212,7 @@ module Wikirate4ruby
 
       def get_relationships(metric_name, metric_designer, params = {})
         answers = []
-        response = @request.get("/#{tranform_to_wr_friendly_name(metric_designer)}+#{tranform_to_wr_friendly_name(metric_name)}+Relationships.json",
+        response = @request.get("/#{transform_to_wr_friendly_name(metric_designer)}+#{transform_to_wr_friendly_name(metric_name)}+Relationships.json",
                                 endpoint_params = %w[limit offset],
                                 filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
 

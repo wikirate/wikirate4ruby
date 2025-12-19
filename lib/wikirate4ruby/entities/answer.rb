@@ -8,7 +8,7 @@ module Wikirate4ruby
 
       def initialize(answer)
         super answer
-        raise parsing_error name = "IncompatibleCardType", message = "The input Card is not an Answer but a #{@type}" unless @type.include? 'Answer'
+        raise parsing_error name = "IncompatibleCardType", message = "The input Card is not an Answer but a #{@type}" unless @type.include? 'Relationship'
 
         @metric_name = get_content('name').split('+')[1]
         @metric_designer = get_content('name').split('+')[0]

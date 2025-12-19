@@ -200,9 +200,8 @@ module Wikirate4ruby
         answers = []
         endpoint = "/#{str_identifier(identifier)}+Answers.json"
         response = @request.get(endpoint, endpoint_params = %w[limit offset],
-                                filters = %w[metric_name designer metric_type value_type research_policy year verification value
-                                    value_from value_to status source updated updater published dataset company_id
-                                    company_name company_category company_group country], params)
+                                filters = %w[year status value value_from value_to updated dataset updater source verification bookmark published metric_keyword designer metric_type metric sort_by sort_dir topic topic_framework value_type assessment],
+                                params)
 
         response['items'].each do |item|
           answers.append(Answer.new(item))
@@ -210,25 +209,25 @@ module Wikirate4ruby
         answers
       end
 
-      def get_relationships(metric_name, metric_designer, params = {})
+      def get_relationships(metric_name: nil, metric_designer: nil, identifier: nil, params: {})
         answers = []
-        response = @request.get("/#{transform_to_wr_friendly_name(metric_designer)}+#{transform_to_wr_friendly_name(metric_name)}+Relationships.json",
-                                endpoint_params = %w[limit offset],
-                                filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
+
+        entity_id =
+          if metric_name && metric_designer
+            "#{metric_designer}+#{metric_name}"
+          else
+            identifier
+          end
+
+        endpoint = construct_endpoint(entity_type: 'Relationships', entity_id: entity_id)
+
+        response = @request.get(
+          "/#{endpoint}",
+          endpoint_params = %w[limit offset],
+          filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
 
         response['items'].each do |item|
           answers.append(Relationship.new(item))
-        end
-        answers
-      end
-
-      def get_relationships_by_metric_id(metric_id, params = {})
-        answers = []
-        response = @request.get("/#{str_identifier(metric_id)}+Relationships.json", endpoint_params = %w[limit offset],
-                                filters = %w[year status company_group country value value_from value_to updated updater verification project bookmark published object_company_name subject_company_name object_company_id subject_company_id], params)
-
-        response['items'].each do |item|
-          answers.append(Relationships.new(item))
         end
         answers
       end

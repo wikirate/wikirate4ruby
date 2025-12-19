@@ -9,7 +9,7 @@ module Wikirate4ruby
         @id = get_content 'id'
         @type = @data['type'].is_a?(String) ? @data['type'] : @data['type']['name']
         @name = @data['name']
-        @content = @data['content']
+        @content = @data['content'] == '' ? nil : @data['content']
         @url = @data['url']
         @codename = @data['codename']
         @html_url = @data['html_url']
@@ -55,7 +55,8 @@ module Wikirate4ruby
       end
 
       def get_content(field)
-        @data[field].is_a?(Hash) ? @data[field]['content'] : @data[field]
+        value = @data[field].is_a?(Hash) ? @data[field]['content'] : @data[field]
+        value == '' ? nil : value
       end
 
       def get_name(field)

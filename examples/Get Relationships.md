@@ -7,10 +7,24 @@ Relation Metric)._
 This example assumes you have configured your Wikirate REST `client`. Instructions on how to configure a client can be
 found in [examples/Configurations.md](https://github.com/wikirate/wikirate4ruby/blob/main/examples/Configuration.md)
 
-The `get_relationships` method take as an input the `metric_name`, `metric_designer` and a `Hash` where the user
-can define the parameters of their request. More specifically, we could divide our params in two different types of
-parameters, the endpoint parameters and the filter parameters. The endpoint parameters help us to iterate through our
-query's results and the filter parameters allow us to restrict our results based on specific given input.
+The `get_relationships` method supports **multiple ways to identify the entity** whose relationships you want to retrieve:
+
+- by `metric_name` **and** `metric_designer`
+- by a generic `identifier` (numeric ID or card name)
+
+Additional request options are passed via the `params` hash.
+
+### Method signature
+
+```ruby
+get_answers(
+  metric_name: nil,
+  metric_designer: nil,
+  identifier: nil,
+  params: {}
+)
+```
+
 <div style="font-family:'Source Code Pro'; font-size:14px; padding-left: 0.5em; padding-right: 0.5em;">
 endpoint params:
 
@@ -22,6 +36,11 @@ filter params:
 
 - **_year_**: returns all the relationships reported on the defined year
 - **_source_**: returns all relationships that cite the defined source
+- **_subject_company_id_**: returns all relationships by subject company id
+- **_object_company_id_**: returns all relationships by object company id
+- **_subject_company_name_**: returns all relationships by subject company name
+- **_object_company_name_**: returns all relationships by object company name
+- **_value_**: returns all the relationships with the defined value (e.g. Tier 2 Supplier)
 - **_name:_** returns all relationships with the subject company name containing the given string
 
 </div>
@@ -36,7 +55,7 @@ relationships = client.get_relationships('Supplied By',
 puts relationships
 ```
 
-## Get Relationships By Metric ID
+## Get Relationships by Metric ID
 
 The `get_relationships_by_metric_id` functions similarly with the `get_relationships` method but instead
 of `metric_name` and `metric_designer` gets as an input the `metric_id`.

@@ -19,7 +19,7 @@ answers = client.get_company_answers(company.id, { 'year' => 2022 })
 #create a new company
 wikirate = client.add_company({ 'name' => 'Wikirate International e.V.', 'headquarters' => 'Germany' })
 #add answer to metric
-address = client.add_research_answer({ 'metric_name' => 'Address',
+address = client.add_answer({ 'metric_name' => 'Address',
                                        'metric_designer' => 'Commons',
                                        'year' => 2023,
                                        'value' => "Schlimannstrasse 29, Berlin",
@@ -46,14 +46,14 @@ Detail documentation about configuration and all available methods of the client
 - [Update Source](examples/Update%20Source.md#update-source)
 - [Get Answer](examples/Get%20Answer.md#get-answer)
 - [Get Answers](examples/Get%20Answers.md#get-answers)
-- [Add Research Metric Answer](examples/Add%20Research%20Metric%20Answer.md#add-research-metric-answer)
-- [Update Research Metric Answer](examples/Update%20Research%20Metric%20Answer.md)
-- [Get Answers By Metric ID](examples/Get%20Answers.md#get-answers-by-metric-id)
-- [Get Relationship Answer](examples/Get%20Relationship%20Answer.md#get-relationship-answer)
-- [Get Relationship Answers](examples/Get%20Relationship%20Answers.md#get-relationship-answers)
-- [Get Relationship Answers By Metric ID](examples/Get%20Relationship%20Answers.md#get-relationship-answers-by-metric-id)
-- [Add Relationship Metric Answer](examples/Add%20Relationship%20Metric%20Answer.md#add-relationship-metric-answer)
-- [Update Relationship Metric Answer](examples/Update%20Relationship%20Metric%20Answer.md#update-relationship-metric-answer)
+- [Add Answer](examples/Add%20Answer.md#add-answer)
+- [Update Answer](examples/Update%20Answer.md)
+- [Get Answers by Metric ID](examples/Get%20Answers.md#get-answers-by-metric-id)
+- [Get Relationship](examples/Get%20Relationship.md#get-relationship)
+- [Get Relationships](examples/Get%20Relationships.md#get-relationships)
+- [Get Relationships by Metric ID](examples/Get%20Relationships.md#get-relationships-by-metric-id)
+- [Add Relationship](examples/Add%20Relationship.md#add-relationship)
+- [Update Relationship](examples/Update%20Relationship.md#update-relationship)
 - [Get Topic](examples/Get%20Topic.md#get-topic)
 - [Get Topics](examples/Get%20Topics.md#get-topics)
 - [Get Dataset](examples/Get%20Dataset.md#get-dataset)
